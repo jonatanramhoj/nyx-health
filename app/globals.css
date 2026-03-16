@@ -35,6 +35,11 @@ button {
   cursor: pointer;
 }
 
+button:disabled {
+  cursor: not-allowed;
+  opacity: 0.5 !important;
+}
+
 @layer components {
   .glass-card {
     background: var(--nyx-glass-bg);
@@ -68,5 +73,40 @@ button {
     background: var(--nyx-glass-bg-lighter);
     border-color: var(--nyx-glass-border-lighter);
     color: #eee;
+  }
+}
+
+@layer components {
+  .nyx-input {
+    @apply w-full rounded-xl px-4 py-2.5 text-sm text-white outline-none;
+    background: var(--nyx-glass-bg);
+    backdrop-filter: blur(var(--nyx-glass-blur));
+    -webkit-backdrop-filter: blur(var(--nyx-glass-blur));
+    border: 0.5px solid var(--nyx-glass-border);
+  }
+
+  .nyx-input:focus {
+    border-color: rgba(255, 255, 255, 0.4);
+  }
+
+  .nyx-input::placeholder {
+    color: rgba(255, 255, 255, 0.25);
+  }
+
+  .nyx-submit {
+    @apply w-full rounded-xl px-4 py-2.5 text-sm text-white cursor-pointer transition-all duration-200;
+    background: rgba(255, 255, 255, 0.12);
+    backdrop-filter: blur(var(--nyx-glass-blur));
+    -webkit-backdrop-filter: blur(var(--nyx-glass-blur));
+    border: 0.5px solid rgba(255, 255, 255, 0.25);
+  }
+
+  .nyx-submit:hover {
+    background: rgba(255, 255, 255, 0.2);
+    border-color: rgba(255, 255, 255, 0.4);
+  }
+
+  .nyx-label {
+    @apply text-xs text-gray-500 mb-2 block;
   }
 }

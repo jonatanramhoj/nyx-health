@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import { Nav } from "@/components/nav";
+import { EntryModal } from "@/components/entry-modal";
 
 export const metadata: Metadata = {
   title: "NYX",
@@ -22,6 +23,7 @@ export default function RootLayout({
       >
         <Nav />
         {children}
+        <EntryModal />
       </body>
     </html>
   );
