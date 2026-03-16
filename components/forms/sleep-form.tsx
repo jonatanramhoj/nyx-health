@@ -1,15 +1,25 @@
+import { addSleepEntry } from "@/lib/supabase/client";
 import { useAppStore } from "@/stores/app-store";
+import { calculateHours } from "@/utils/calculate-hours";
 
 export function SleepForm() {
   const setActiveModal = useAppStore((state) => state.setActiveModal);
 
-  const handleSubmit = (formData: FormData) => {
-    const bedTime = formData.get("bedTime");
-    const wakeTime = formData.get("wakeTime");
+  const handleSubmit = async (formData: FormData) => {
+    const bedTime = formData.get("bedTime") as string;
+    const wakeTime = formData.get("wakeTime") as string;
+    const hours = calculateHours(bedTime, wakeTime);
+    const date = new Date().toISOString().split("T")[0];
 
-    const activityEntry = { bedTime, wakeTime };
+    const entry = {
+      bed_time: bedTime,
+      wake_time: wakeTime,
+      hours,
+      date,
+    };
 
-    // API request goes here...
+    await addSleepEntry(entry);
+
     setActiveModal(null);
   };
 
@@ -22,13 +32,13 @@ export function SleepForm() {
         <label htmlFor="bedTime" className="nyx-label">
           Bed time
         </label>
-        <input className="nyx-input" name="bedTime" type="text" />
+        <input className="nyx-input" name="bedTime" type="time" required />
       </div>
       <div className="mb-4">
         <label htmlFor="wakeTime" className="nyx-label">
           Wake time
         </label>
-        <input className="nyx-input" name="wakeTime" type="number" />
+        <input className="nyx-input" name="wakeTime" type="time" required />
       </div>
       <button className="nyx-submit" type="submit">
         Save

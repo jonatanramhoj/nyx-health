@@ -5,3 +5,10 @@ export type SleepEntry = {
   wakeTime: string;
   hours: number;
 };
+
+export type SleepEntryInsert = {
+  date: string;
+  bed_time: string;
+  wake_time: string;
+  hours: number;
+};
