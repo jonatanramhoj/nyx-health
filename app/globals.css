@@ -1,26 +1,72 @@
+@import url("https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,300;0,400;0,500;1,300;1,400;1,500&display=swap");
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
+@theme {
+  /* NYX custom tokens */
+  --nyx-glass-bg: rgba(40, 40, 40, 0.9);
+  --nyx-glass-bg-lighter: rgba(98, 98, 98, 0.9);
+  --nyx-glass-border: rgba(255, 255, 255, 0.2);
+  --nyx-glass-border-lighter: rgba(255, 255, 255, 0.4);
+  --nyx-glass-border-darker: rgba(255, 255, 255, 0.08);
+  --nyx-glass-blur: 28px;
+  --nyx-text-primary: rgba(255, 255, 255, 1);
+  --nyx-text-secondary: rgba(255, 255, 255, 0.6);
+  --nyx-text-tertiary: rgba(255, 255, 255, 0.35);
+  --nyx-text-ghost: rgba(255, 255, 255, 0.25);
+  --nyx-bar-high: rgba(255, 255, 255, 0.7);
+  --nyx-bar-mid: rgba(255, 255, 255, 0.25);
+  --nyx-bar-empty: rgba(255, 255, 255, 0.08);
+  --nyx-pill-inactive-bg: rgba(255, 255, 255, 0.04);
+  --nyx-pill-inactive-border: rgba(255, 255, 255, 0.15);
+  --nyx-pill-active-bg: rgba(255, 255, 255, 0.14);
+  --nyx-pill-active-border: rgba(255, 255, 255, 0.4);
+  --nyx-overlay: rgba(0, 0, 0, 0.52);
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  --background: #1a1a1a;
+  --foreground: #fff;
 }
 
 body {
-  background: var(--background);
+  font-family: "DM Mono", monospace;
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+}
+
+button {
+  cursor: pointer;
+}
+
+@layer components {
+  .glass-card {
+    background: var(--nyx-glass-bg);
+    backdrop-filter: blur(var(--nyx-glass-blur));
+    -webkit-backdrop-filter: blur(var(--nyx-glass-blur));
+    border: 0.5px solid var(--nyx-glass-border);
+    border-radius: 16px;
+  }
+
+  .log-button {
+    @apply w-full text-left px-4 py-2.5 text-[12px] transition-all duration-200 cursor-pointer;
+    border: 0.5px solid var(--nyx-glass-border);
+    background: var(--nyx-glass-border-darker);
+    border-radius: 8px;
+  }
+
+  .log-button:hover {
+    background: var(--nyx-glass-border);
+  }
+
+  .filter-btn {
+    @apply rounded-2xl! px-4 py-3 text-xs text-gray-400 mr-2 transition-all ease-in-out duration-200;
+    background: var(--nyx-glass-bg);
+    backdrop-filter: blur(var(--nyx-glass-blur));
+    -webkit-backdrop-filter: blur(var(--nyx-glass-blur));
+    border: 0.5px solid var(--nyx-glass-border);
+  }
+
+  .filter-btn:hover,
+  .filter-btn.active {
+    background: var(--nyx-glass-bg-lighter);
+    border-color: var(--nyx-glass-border-lighter);
+    color: #eee;
+  }
 }
