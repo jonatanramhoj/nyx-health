@@ -14,6 +14,7 @@ import { getDateRange } from "@/utils/get-date-range";
 import { Filter } from "@/types/filter";
 import { ActivityEntry } from "@/types/activity";
 import { getDay } from "@/utils/get-day";
+import { MoodEntry } from "@/types/mood";
 
 export const getSleepEntries = async (
   filter: Filter,
@@ -60,9 +61,23 @@ export const getActivityEntries = async (
   return res;
 };
 
-export const getMoodEntries = async (filter: string) => {
-  const { data } = await supabase.from("mood_entries").select();
-  return data;
+export const getMoodEntries = async (filter: Filter): Promise<MoodEntry[]> => {
+  const { data, error } = await supabase
+    .from("mood_entries")
+    .select("*")
+    .gte("date", getDateRange(filter))
+    .order("date");
+
+  if (error) throw error;
+
+  const entries = toCamel(data ?? []) as MoodEntry[];
+
+  const res = entries.map((entry) => ({
+    ...entry,
+    day: getDay(entry.date),
+  }));
+
+  return res;
 };
 
 export const addSleep = async (
@@ -91,7 +106,15 @@ export const addActivity = async (
   return res;
 };
 
-export const addMoodEntry = async (entry: SleepEntry) => {
-  const { data } = await supabase.from("mood_entries").insert(entry);
-  return data;
+export const addMoodEntry = async (
+  date: string,
+  score: number,
+  notes: string,
+) => {
+  const res = await supabase.from("mood_entries").insert({
+    date,
+    score,
+    notes,
+  });
+  return res;
 };

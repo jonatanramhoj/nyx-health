@@ -4,8 +4,8 @@ export function DotSelector({
   score,
   onChange,
 }: {
-  score: number | null;
-  onChange: (score: number | null) => void;
+  score: number;
+  onChange?: (score: number) => void;
 }) {
   const scoreValues = [1, 2, 3, 4, 5];
 

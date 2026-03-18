@@ -2,22 +2,15 @@
 import { Filter } from "@/types/filter";
 import { WidgetContainer } from "../widget-container";
 import { BarChart, Bar, ResponsiveContainer, XAxis } from "recharts";
-import {
-  weeklyMoodData,
-  monthlyMoodData,
-  dailyMoodData,
-} from "@/data/mock-data";
 import { DotSelector } from "../dot-selector";
 import { MoodEntry } from "@/types/mood";
+import useSWR from "swr";
+import { getMoodEntries } from "@/lib/supabase/client";
 
 export function Mood({ filter }: { filter: Filter }) {
-  // TODO: SWR request
-  const periodData =
-    filter === Filter.Today
-      ? dailyMoodData
-      : filter === Filter.Week
-        ? weeklyMoodData
-        : monthlyMoodData;
+  const { data: periodData, isLoading } = useSWR(["mood", filter], () =>
+    getMoodEntries(filter),
+  );
 
   const getAverageScore = (data: MoodEntry[]) => {
     if (!data.length) return 0;
@@ -25,10 +18,10 @@ export function Mood({ filter }: { filter: Filter }) {
     return Math.round((sum / data.length) * 10) / 10;
   };
 
-  const averageScore = getAverageScore(periodData);
+  const averageScore = getAverageScore(periodData ?? []);
 
   return (
-    <WidgetContainer label="Mood">
+    <WidgetContainer label="Mood" isLoading={isLoading}>
       <h3 className="text-xl mb-6">
         {averageScore}
         <span className="text-sm text-gray-500">/5</span>
