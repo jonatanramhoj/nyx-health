@@ -51,14 +51,12 @@ export function Sleep({ filter }: { filter: Filter }) {
   const avgBedTime = getAverageTime(periodData ?? [], "bedTime");
   const avgWakeTime = getAverageTime(periodData ?? [], "wakeTime");
 
-  if (error) {
-    return <span>Error</span>;
-  }
-
   return (
-    <WidgetContainer label="Sleep">
+    <WidgetContainer label="Sleep" isLoading={isLoading} type="ring">
       <div className="flex items-center justify-center flex-col w-full">
-        {isLoading ? (
+        {error ? (
+          <p className="text-white/30 text-sm">Cannot load data...</p>
+        ) : isLoading ? (
           <p className="text-white/30 text-sm">Loading...</p>
         ) : (
           <>

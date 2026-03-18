@@ -2,21 +2,17 @@
 import { Filter } from "@/types/filter";
 import { WidgetContainer } from "../widget-container";
 import { BarChart, Bar, ResponsiveContainer, XAxis } from "recharts";
-import {
-  dailyActivityData,
-  weeklyActivityData,
-  monthlyActivityData,
-} from "@/data/mock-data";
 import { ActivityEntry } from "@/types/activity";
+import useSWR from "swr";
+import { getActivityEntries } from "@/lib/supabase/client";
 
 export function Activity({ filter }: { filter: Filter }) {
-  // TODO: SWR request
-  const periodData =
-    filter === Filter.Today
-      ? dailyActivityData
-      : filter === Filter.Week
-        ? weeklyActivityData
-        : monthlyActivityData;
+  const { data: periodData, isLoading } = useSWR<ActivityEntry[]>(
+    ["activity", filter],
+    () => getActivityEntries(filter),
+  );
+
+  console.log("periodData", periodData);
 
   const getAverageDuration = (data: ActivityEntry[]) => {
     if (!data.length) return 0;
@@ -34,12 +30,12 @@ export function Activity({ filter }: { filter: Filter }) {
     return Object.entries(counts).sort((a, b) => b[1] - a[1])[0][0];
   };
 
-  const averageDuration = getAverageDuration(periodData);
+  const averageDuration = getAverageDuration(periodData ?? []);
 
-  const mostPopularActivity = getMostPopularActivity(periodData);
+  const mostPopularActivity = getMostPopularActivity(periodData ?? []);
 
   return (
-    <WidgetContainer label="Activity">
+    <WidgetContainer label="Activity" isLoading={isLoading}>
       <h3 className="text-xl">
         {mostPopularActivity}{" "}
         <span className="text-sm text-gray-500">{averageDuration} min</span>

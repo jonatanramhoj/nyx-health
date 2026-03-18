@@ -14,8 +14,6 @@ export function SleepForm() {
     const bedTime = formData.get("bedTime") as string;
     const wakeTime = formData.get("wakeTime") as string;
 
-    if (!bedTime) return;
-
     setStatus("loading");
 
     const { error } = await addSleep(date, bedTime, wakeTime);

@@ -110,3 +110,7 @@ button:disabled {
     @apply text-xs text-gray-500 mb-2 block;
   }
 }
+
+input::-webkit-calendar-picker-indicator {
+  filter: invert(1) opacity(0.3) !important;
+}
