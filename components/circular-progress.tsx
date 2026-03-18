@@ -1,4 +1,6 @@
 export function CircularProgress({ duration }: { duration: number }) {
+  const capped = Math.min(duration / 8, 1);
+
   return (
     <svg width="150" height="150" viewBox="0 0 100 100">
       <circle
@@ -18,7 +20,7 @@ export function CircularProgress({ duration }: { duration: number }) {
         strokeWidth="3"
         strokeLinecap="round"
         strokeDasharray={2 * Math.PI * 40}
-        strokeDashoffset={2 * Math.PI * 40 * (1 - duration / 8)}
+        strokeDashoffset={2 * Math.PI * 40 * (1 - capped)}
         transform="rotate(-90 50 50)"
         style={{ transition: "stroke-dashoffset 0.6s ease-in-out" }}
       />

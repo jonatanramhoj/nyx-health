@@ -22,13 +22,13 @@ export function ActivityForm() {
         <label htmlFor="type" className="nyx-label">
           Type
         </label>
-        <input className="nyx-input" name="type" type="text" />
+        <input required className="nyx-input" name="type" type="text" />
       </div>
       <div className="mb-4">
         <label htmlFor="type" className="nyx-label">
           Duration
         </label>
-        <input className="nyx-input" name="duration" type="number" />
+        <input required className="nyx-input" name="duration" type="number" />
       </div>
       <button className="nyx-submit" type="submit">
         Save

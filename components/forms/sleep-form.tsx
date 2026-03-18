@@ -1,33 +1,55 @@
-import { addSleepEntry } from "@/lib/supabase/client";
+import { addSleep } from "@/lib/supabase/client";
 import { useAppStore } from "@/stores/app-store";
-import { calculateHours } from "@/utils/calculate-hours";
+import { useState } from "react";
+import { Loader } from "../loader";
+import { today } from "@/utils/date-helpers";
 
 export function SleepForm() {
   const setActiveModal = useAppStore((state) => state.setActiveModal);
 
+  const [status, setStatus] = useState<"idle" | "loading" | "success">("idle");
+
   const handleSubmit = async (formData: FormData) => {
+    const date = formData.get("date") as string;
     const bedTime = formData.get("bedTime") as string;
     const wakeTime = formData.get("wakeTime") as string;
-    const hours = calculateHours(bedTime, wakeTime);
-    const date = new Date().toISOString().split("T")[0];
 
-    const entry = {
-      bed_time: bedTime,
-      wake_time: wakeTime,
-      hours,
-      date,
-    };
+    if (!bedTime) return;
 
-    await addSleepEntry(entry);
+    setStatus("loading");
 
-    setActiveModal(null);
+    const { error } = await addSleep(date, bedTime, wakeTime);
+
+    if (error) {
+      setStatus("idle");
+      return;
+    }
+
+    setStatus("success");
+
+    setTimeout(() => {
+      setActiveModal(null);
+      setStatus("idle");
+    }, 1000);
   };
 
   return (
     <form action={handleSubmit}>
       <span className="mb-4 block uppercase text-gray-500 text-sm">
-        Log Sleep
+        Log sleep
       </span>
+      <div className="mb-4">
+        <label htmlFor="bedTime" className="nyx-label">
+          Date
+        </label>
+        <input
+          className="nyx-input"
+          name="date"
+          type="date"
+          defaultValue={today()}
+          required
+        />
+      </div>
       <div className="mb-4">
         <label htmlFor="bedTime" className="nyx-label">
           Bed time
@@ -40,8 +62,18 @@ export function SleepForm() {
         </label>
         <input className="nyx-input" name="wakeTime" type="time" required />
       </div>
-      <button className="nyx-submit" type="submit">
-        Save
+      <button
+        className="nyx-submit flex justify-center h-10.25"
+        type="submit"
+        disabled={status === "loading"}
+      >
+        {status === "loading" ? (
+          <Loader />
+        ) : status === "success" ? (
+          "✔︎"
+        ) : (
+          "Save"
+        )}
       </button>
     </form>
   );
