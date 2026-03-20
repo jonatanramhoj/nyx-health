@@ -22,29 +22,33 @@ export function Mood({ filter }: { filter: Filter }) {
 
   return (
     <WidgetContainer label="Mood" isLoading={isLoading}>
-      <h3 className="text-xl mb-6">
-        {averageScore}
-        <span className="text-sm text-gray-500">/5</span>
-      </h3>
-      <div className="mb-4">
-        <DotSelector score={Math.round(averageScore)} />
-      </div>
-      {periodData && (
-        <ResponsiveContainer width="100%" height={80} className="mt-auto">
-          <BarChart data={periodData} barSize={8}>
-            <Bar
-              dataKey="score"
-              fill="rgba(255,255,255,0.7)"
-              radius={[2, 2, 0, 0]}
-            />
-            <XAxis
-              dataKey="day"
-              axisLine={false}
-              tickLine={false}
-              tick={{ fill: "rgba(255,255,255,0.25)", fontSize: 9 }}
-            />
-          </BarChart>
-        </ResponsiveContainer>
+      {periodData ? (
+        <>
+          <h3 className="text-xl mb-6">
+            {averageScore}
+            <span className="text-sm text-gray-500">/5</span>
+          </h3>
+          <div className="mb-4">
+            <DotSelector score={Math.round(averageScore)} />
+          </div>
+          <ResponsiveContainer width="100%" height={80} className="mt-auto">
+            <BarChart data={periodData} barSize={8}>
+              <Bar
+                dataKey="score"
+                fill="rgba(255,255,255,0.7)"
+                radius={[2, 2, 0, 0]}
+              />
+              <XAxis
+                dataKey="day"
+                axisLine={false}
+                tickLine={false}
+                tick={{ fill: "rgba(255,255,255,0.25)", fontSize: 9 }}
+              />
+            </BarChart>
+          </ResponsiveContainer>
+        </>
+      ) : (
+        <span className="text-gray-400">No mood entries logged yet</span>
       )}
     </WidgetContainer>
   );

@@ -6,17 +6,15 @@ import useSWR from "swr";
 import { getSleepEntries } from "@/lib/supabase/client";
 
 export function Sleep({ filter }: { filter: Filter }) {
-  const {
-    data: periodData,
-    error,
-    isLoading,
-  } = useSWR<SleepEntry[]>(["sleep", filter], () => getSleepEntries(filter));
+  const { data: periodData, isLoading } = useSWR<SleepEntry[]>(
+    ["sleep", filter],
+    () => getSleepEntries(filter),
+  );
 
   const getAverageDuration = (data: SleepEntry[]) => {
     if (!data?.length) return 0;
     const sum = data.reduce((acc, entry) => acc + (entry.hours ?? 0), 0);
     const res = Math.round((sum / data.length) * 10) / 10;
-    console.log("res", res);
     return res;
   };
 
@@ -53,28 +51,22 @@ export function Sleep({ filter }: { filter: Filter }) {
 
   return (
     <WidgetContainer label="Sleep" isLoading={isLoading} type="ring">
-      <div className="flex items-center justify-center flex-col w-full">
-        {error ? (
-          <p className="text-white/30 text-sm">Cannot load data...</p>
-        ) : isLoading ? (
-          <p className="text-white/30 text-sm">Loading...</p>
-        ) : (
-          <>
-            <div className="mb-4 flex items-center justify-center flex-col">
-              <CircularProgress duration={averageDuration} />
-            </div>
-            <div className="flex justify-between mb-4">
-              <span className="text-xs text-gray-500 mr-8">
-                {avgBedTime} bed
-              </span>
-              <span className="text-xs text-gray-500">{avgWakeTime} wake</span>
-            </div>
-            <span className="text-xs text-gray-400 text-center block">
-              {sleepSentiment}
-            </span>
-          </>
-        )}
-      </div>
+      {periodData ? (
+        <div className="flex items-center justify-center flex-col w-full">
+          <div className="mb-4 flex items-center justify-center flex-col">
+            <CircularProgress duration={averageDuration} />
+          </div>
+          <div className="flex justify-between mb-4">
+            <span className="text-xs text-gray-500 mr-8">{avgBedTime} bed</span>
+            <span className="text-xs text-gray-500">{avgWakeTime} wake</span>
+          </div>
+          <span className="text-xs text-gray-400 text-center block">
+            {sleepSentiment}
+          </span>
+        </div>
+      ) : (
+        <span className="text-gray-400">No sleep entries logged yet</span>
+      )}
     </WidgetContainer>
   );
 }

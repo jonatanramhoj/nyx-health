@@ -18,11 +18,16 @@ export function WidgetContainer({
 }: Props) {
   return (
     <div
-      className={clsx("rounded-2xl glass-card p-6 flex flex-col", className)}
+      className={clsx(
+        "rounded-2xl glass-card p-6 flex flex-col min-h-75",
+        className,
+      )}
     >
-      <span className="text-gray-300 uppercase text-xs block mb-6">
-        {label}
-      </span>
+      {label && (
+        <span className="text-gray-300 uppercase text-xs block mb-6">
+          {label}
+        </span>
+      )}
       {isLoading ? <WidgetSkeleton type={type} /> : children}
     </div>
   );

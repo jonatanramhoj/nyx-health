@@ -12,8 +12,6 @@ export function Activity({ filter }: { filter: Filter }) {
     () => getActivityEntries(filter),
   );
 
-  console.log("periodData", periodData);
-
   const getAverageDuration = (data: ActivityEntry[]) => {
     if (!data.length) return 0;
     const sum = data.reduce((acc, entry) => acc + entry.minutes, 0);
@@ -36,26 +34,31 @@ export function Activity({ filter }: { filter: Filter }) {
 
   return (
     <WidgetContainer label="Activity" isLoading={isLoading}>
-      <h3 className="text-xl">
-        {mostPopularActivity}{" "}
-        <span className="text-sm text-gray-500">{averageDuration} min</span>
-      </h3>
-      {periodData && (
-        <ResponsiveContainer width="100%" height={80} className="mt-auto">
-          <BarChart data={periodData} barSize={8}>
-            <Bar
-              dataKey="minutes"
-              fill="rgba(255,255,255,0.7)"
-              radius={[2, 2, 0, 0]}
-            />
-            <XAxis
-              dataKey="day"
-              axisLine={false}
-              tickLine={false}
-              tick={{ fill: "rgba(255,255,255,0.25)", fontSize: 9 }}
-            />
-          </BarChart>
-        </ResponsiveContainer>
+      {periodData ? (
+        <>
+          <h3 className="text-xl">
+            {mostPopularActivity}{" "}
+            <span className="text-sm text-gray-500">{averageDuration} min</span>
+          </h3>
+
+          <ResponsiveContainer width="100%" height={80} className="mt-auto">
+            <BarChart data={periodData} barSize={8}>
+              <Bar
+                dataKey="minutes"
+                fill="rgba(255,255,255,0.7)"
+                radius={[2, 2, 0, 0]}
+              />
+              <XAxis
+                dataKey="day"
+                axisLine={false}
+                tickLine={false}
+                tick={{ fill: "rgba(255,255,255,0.25)", fontSize: 9 }}
+              />
+            </BarChart>
+          </ResponsiveContainer>
+        </>
+      ) : (
+        <span className="text-gray-400">No activities logged yet</span>
       )}
     </WidgetContainer>
   );
