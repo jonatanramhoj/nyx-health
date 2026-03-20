@@ -3,7 +3,7 @@ import { WidgetSkeleton } from "./skeletons/widget-skeleton";
 
 type Props = {
   children: React.ReactNode;
-  label: string;
+  label: string | React.ReactNode;
   className?: string;
   isLoading?: boolean;
   type?: "ring" | "bars";
