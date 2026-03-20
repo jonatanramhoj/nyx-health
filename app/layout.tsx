@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 import { Nav } from "@/components/nav";
 import { EntryModal } from "@/components/entry-modal";
-import { getUser, signOut } from "@/lib/supabase/server";
+import { getUser } from "@/lib/supabase/server";
 
 export const metadata: Metadata = {
   title: "NYX",
