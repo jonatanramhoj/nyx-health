@@ -3,8 +3,10 @@ import { useAppStore } from "@/stores/app-store";
 import { useState } from "react";
 import { Loader } from "../loader";
 import { today } from "@/utils/date-helpers";
+import { Filter } from "@/types/filter";
+import { mutate } from "swr";
 
-export function SleepForm() {
+export function SleepForm({ filter }: { filter: Filter }) {
   const setActiveModal = useAppStore((state) => state.setActiveModal);
 
   const [status, setStatus] = useState<"idle" | "loading" | "success">("idle");
@@ -24,6 +26,7 @@ export function SleepForm() {
     }
 
     setStatus("success");
+    mutate(["sleep", filter]);
 
     setTimeout(() => {
       setActiveModal(null);

@@ -4,8 +4,10 @@ import { useAppStore } from "@/stores/app-store";
 import { Loader } from "../loader";
 import { addMoodEntry } from "@/lib/supabase/client";
 import { today } from "@/utils/date-helpers";
+import { Filter } from "@/types/filter";
+import { mutate } from "swr";
 
-export function MoodForm() {
+export function MoodForm({ filter }: { filter: Filter }) {
   const [score, setScore] = useState<number>(0);
   const setActiveModal = useAppStore((state) => state.setActiveModal);
   const [status, setStatus] = useState<"idle" | "loading" | "success">("idle");
@@ -24,6 +26,7 @@ export function MoodForm() {
     }
 
     setStatus("success");
+    mutate(["mood", filter]);
 
     setTimeout(() => {
       setActiveModal(null);

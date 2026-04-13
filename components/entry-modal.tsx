@@ -9,6 +9,7 @@ import { SleepForm } from "./forms/sleep-form";
 export function EntryModal() {
   const activeModal = useAppStore((state) => state.activeModal);
   const setActiveModal = useAppStore((state) => state.setActiveModal);
+  const activeFilter = useAppStore((state) => state.activeFilter);
 
   const forms = {
     [ModalTypes.Sleep]: SleepForm,
@@ -24,7 +25,7 @@ export function EntryModal() {
 
   return (
     <Modal setActiveModal={setActiveModal}>
-      {ActiveForm && <ActiveForm />}
+      {ActiveForm && <ActiveForm filter={activeFilter} />}
     </Modal>
   );
 }

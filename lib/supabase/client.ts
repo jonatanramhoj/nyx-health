@@ -1,11 +1,14 @@
 // Repository Pattern, data access layer (DAL), service layer
 
-import { createClient } from "@supabase/supabase-js";
+import { createBrowserClient } from "@supabase/ssr";
 
-export const supabase = createClient(
+export const supabase = createBrowserClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
   process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
 );
+
+console.log(process.env.NEXT_PUBLIC_SUPABASE_URL);
+console.log(process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY);
 
 import { toCamel } from "@/utils/case-conversion";
 import { SleepEntry } from "@/types/sleep";
@@ -111,6 +114,10 @@ export const addMoodEntry = async (
   score: number,
   notes: string,
 ) => {
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  console.log("user", user?.id);
   const res = await supabase.from("mood_entries").insert({
     date,
     score,

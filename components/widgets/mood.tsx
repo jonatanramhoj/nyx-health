@@ -6,10 +6,14 @@ import { DotSelector } from "../dot-selector";
 import { MoodEntry } from "@/types/mood";
 import useSWR from "swr";
 import { getMoodEntries } from "@/lib/supabase/client";
+import { useAppStore } from "@/stores/app-store";
 
 export function Mood({ filter }: { filter: Filter }) {
-  const { data: periodData, isLoading } = useSWR(["mood", filter], () =>
-    getMoodEntries(filter),
+  const user = useAppStore((state) => state.user);
+
+  const { data: periodData, isLoading } = useSWR(
+    user ? ["mood", filter] : null,
+    () => getMoodEntries(filter),
   );
 
   const getAverageScore = (data: MoodEntry[]) => {
@@ -22,7 +26,7 @@ export function Mood({ filter }: { filter: Filter }) {
 
   return (
     <WidgetContainer label="Mood" isLoading={isLoading}>
-      {periodData ? (
+      {periodData && periodData.length > 0 ? (
         <>
           <h3 className="text-xl mb-6">
             {averageScore}
@@ -48,7 +52,7 @@ export function Mood({ filter }: { filter: Filter }) {
           </ResponsiveContainer>
         </>
       ) : (
-        <span className="text-gray-400">No mood entries logged yet</span>
+        <span className="text-gray-400">Log your mood</span>
       )}
     </WidgetContainer>
   );

@@ -137,3 +137,31 @@ input::-webkit-calendar-picker-indicator {
     stroke-dashoffset: 60;
   }
 }
+
+@keyframes nyxPulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.3;
+  }
+}
+
+@keyframes nyxBlink {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0;
+  }
+}
+
+.nyx-pulse {
+  animation: nyxPulse 2.5s ease-in-out infinite;
+}
+
+.nyx-blink {
+  animation: nyxBlink 1s step-end infinite;
+}

@@ -4,10 +4,13 @@ import { WidgetContainer } from "../widget-container";
 import { SleepEntry } from "@/types/sleep";
 import useSWR from "swr";
 import { getSleepEntries } from "@/lib/supabase/client";
+import { useAppStore } from "@/stores/app-store";
 
 export function Sleep({ filter }: { filter: Filter }) {
+  const user = useAppStore((state) => state.user);
+
   const { data: periodData, isLoading } = useSWR<SleepEntry[]>(
-    ["sleep", filter],
+    user ? ["sleep", filter] : null,
     () => getSleepEntries(filter),
   );
 
@@ -49,13 +52,16 @@ export function Sleep({ filter }: { filter: Filter }) {
   const avgBedTime = getAverageTime(periodData ?? [], "bedTime");
   const avgWakeTime = getAverageTime(periodData ?? [], "wakeTime");
 
+  console.log("periodData", periodData);
+
   return (
     <WidgetContainer label="Sleep" isLoading={isLoading} type="ring">
-      {periodData ? (
+      {periodData && periodData.length > 0 ? (
         <div className="flex items-center justify-center flex-col w-full">
           <div className="mb-4 flex items-center justify-center flex-col">
             <CircularProgress duration={averageDuration} />
           </div>
+
           <div className="flex justify-between mb-4">
             <span className="text-xs text-gray-500 mr-8">{avgBedTime} bed</span>
             <span className="text-xs text-gray-500">{avgWakeTime} wake</span>
@@ -65,7 +71,7 @@ export function Sleep({ filter }: { filter: Filter }) {
           </span>
         </div>
       ) : (
-        <span className="text-gray-400">No sleep entries logged yet</span>
+        <span className="text-gray-400">Log your sleep</span>
       )}
     </WidgetContainer>
   );

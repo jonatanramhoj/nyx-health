@@ -4,8 +4,10 @@ import { useAppStore } from "@/stores/app-store";
 import { useState } from "react";
 import { Loader } from "../loader";
 import { today } from "@/utils/date-helpers";
+import { mutate } from "swr";
+import { Filter } from "@/types/filter";
 
-export function ActivityForm() {
+export function ActivityForm({ filter }: { filter: Filter }) {
   const setActiveModal = useAppStore((state) => state.setActiveModal);
   const [status, setStatus] = useState<"idle" | "loading" | "success">("idle");
 
@@ -28,6 +30,7 @@ export function ActivityForm() {
     }
 
     setStatus("success");
+    mutate(["activity", filter]);
 
     setTimeout(() => {
       setActiveModal(null);

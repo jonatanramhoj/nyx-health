@@ -4,7 +4,6 @@ import { useAppStore } from "@/stores/app-store";
 
 export function LogEntry() {
   const setActiveModal = useAppStore((state) => state.setActiveModal);
-
   return (
     <WidgetContainer label="Log entry">
       <div>

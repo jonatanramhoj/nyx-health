@@ -5,10 +5,12 @@ import { BarChart, Bar, ResponsiveContainer, XAxis } from "recharts";
 import { ActivityEntry } from "@/types/activity";
 import useSWR from "swr";
 import { getActivityEntries } from "@/lib/supabase/client";
+import { useAppStore } from "@/stores/app-store";
 
 export function Activity({ filter }: { filter: Filter }) {
+  const user = useAppStore((state) => state.user);
   const { data: periodData, isLoading } = useSWR<ActivityEntry[]>(
-    ["activity", filter],
+    user ? ["activity", filter] : null,
     () => getActivityEntries(filter),
   );
 
@@ -34,7 +36,7 @@ export function Activity({ filter }: { filter: Filter }) {
 
   return (
     <WidgetContainer label="Activity" isLoading={isLoading}>
-      {periodData ? (
+      {periodData && periodData.length > 0 ? (
         <>
           <h3 className="text-xl">
             {mostPopularActivity}{" "}
@@ -58,7 +60,7 @@ export function Activity({ filter }: { filter: Filter }) {
           </ResponsiveContainer>
         </>
       ) : (
-        <span className="text-gray-400">No activities logged yet</span>
+        <span className="text-gray-400">Log your activity</span>
       )}
     </WidgetContainer>
   );

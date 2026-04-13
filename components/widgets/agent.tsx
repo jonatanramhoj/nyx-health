@@ -1,8 +1,20 @@
 import { WidgetContainer } from "../widget-container";
 
+const AgentLabel = () => {
+  return (
+    <p className="flex items-center">
+      <span
+        className="nyx-pulse mr-2 inline-block w-[6px] h-[6px] align-middle rounded-full shrink-0"
+        style={{ background: "var(--nyx-text-primary)" }}
+      />
+      NYX · Insight
+    </p>
+  );
+};
+
 export function Agent({ className }: { className?: string }) {
   return (
-    <WidgetContainer label="NYX · Insight" className={className}>
+    <WidgetContainer label={<AgentLabel />} className={className}>
       <div>
         <p className="text-xs leading-snug text-gray-400">
           Your sleep consistency has improved over the past week. The

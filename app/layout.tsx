@@ -3,6 +3,8 @@ import "./globals.css";
 import { Nav } from "@/components/nav";
 import { EntryModal } from "@/components/entry-modal";
 import { getUser } from "@/lib/supabase/server";
+import { SWRConfig } from "swr";
+import { AuthProvider } from "@/components/auth-provider";
 
 export const metadata: Metadata = {
   title: "NYX",
@@ -23,9 +25,18 @@ export default async function RootLayout({
           backgroundImage: "url('/iceland-3.png')",
         }}
       >
-        <Nav user={user} />
-        {children}
-        <EntryModal />
+        <SWRConfig
+          value={{
+            revalidateOnFocus: false,
+            revalidateOnReconnect: false,
+            shouldRetryOnError: false,
+          }}
+        >
+          <AuthProvider user={user} />
+          <Nav />
+          {children}
+          <EntryModal />
+        </SWRConfig>
       </body>
     </html>
   );
